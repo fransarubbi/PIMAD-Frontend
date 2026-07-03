@@ -150,6 +150,9 @@ export async function generateCertificate(data: CertificateRequest): Promise<Blo
   return downloadBlob('/certificates/generate', `certificate-${data.commonName}.zip`, {
     method: 'POST',
     body: JSON.stringify(data),
+    headers: {
+      'Accept': 'application/zip'
+    }
   });
 }
 

@@ -193,23 +193,23 @@
             <StatusBadge status={$edgeStates[edge.edgeId] || 'Inactive'} />
           </div>
 
-          <h3 class="mt-4 text-lg font-semibold text-card-foreground transition-colors group-hover:text-primary">
+          <h3 class="mt-4 text-lg font-semibold text-card-foreground transition-colors group-hover:text-primary max-w-full break-words">
             {edge.name}
           </h3>
 
           {#if edge.location}
-            <div class="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
-              <MapPin class="h-4 w-4" />
-              {edge.location}
+            <div class="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground max-w-full break-words">
+              <MapPin class="h-4 w-4 shrink-0" />
+              <span class="truncate">{edge.location}</span>
             </div>
           {/if}
 
           <div class="mt-4 flex items-center justify-between border-t border-border pt-4">
             <div class="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <NetworkIcon class="h-4 w-4" />
+              <NetworkIcon class="h-4 w-4 shrink-0" />
               <span>Ver redes</span>
             </div>
-            <div class="text-xs text-muted-foreground font-mono">
+            <div class="text-xs text-muted-foreground font-mono truncate max-w-[140px]">
               ID: {edge.edgeId}
             </div>
           </div>
@@ -232,7 +232,7 @@
             <button
               onclick={(e) => downloadEdgeConfig(edge, e)}
               title="Descargar configuración ZIP"
-              class="flex items-center justify-center rounded-lg border border-border bg-card px-3 py-2 text-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:border-primary/50"
+              class="hidden md:flex items-center justify-center rounded-lg border border-border bg-card px-3 py-2 text-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:border-primary/50"
             >
               <Download class="h-4 w-4" />
             </button>
@@ -402,41 +402,41 @@
 
       <div>
         <h3 class="text-sm uppercase tracking-wider font-bold text-primary mb-3">Configuración de Sistema</h3>
-        <div class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm bg-card border border-border p-4 rounded-xl">
-          <div class="col-span-2">
-            <span class="text-muted-foreground block text-xs mb-0.5">ID del Edge</span>
-            <span class="font-mono text-card-foreground font-medium">{viewingEdge.edgeId}</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm bg-card/50 border border-border p-3 sm:p-4 rounded-xl">
+          <div class="sm:col-span-2">
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">ID del Edge</span>
+            <span class="font-mono text-card-foreground font-medium break-all">{viewingEdge.edgeId}</span>
           </div>
           <div>
-            <span class="text-muted-foreground block text-xs mb-0.5">Nombre</span>
-            <span class="font-medium text-card-foreground">{viewingEdge.name}</span>
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">Nombre</span>
+            <span class="font-medium text-card-foreground break-words">{viewingEdge.name}</span>
           </div>
           <div>
-            <span class="text-muted-foreground block text-xs mb-0.5">Ubicación</span>
-            <span class="text-card-foreground">{viewingEdge.location}</span>
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">Ubicación</span>
+            <span class="text-card-foreground break-words">{viewingEdge.location}</span>
           </div>
           <div>
-            <span class="text-muted-foreground block text-xs mb-0.5">Host Server</span>
-            <span class="font-mono text-xs">{viewingEdge.hostServer}:{viewingEdge.hostPort}</span>
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">Host Server</span>
+            <span class="font-mono text-[11px] sm:text-xs break-all">{viewingEdge.hostServer}:{viewingEdge.hostPort}</span>
           </div>
           <div>
-            <span class="text-muted-foreground block text-xs mb-0.5">Host Local</span>
-            <span class="font-mono text-xs">{viewingEdge.hostLocal}</span>
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">Host Local</span>
+            <span class="font-mono text-[11px] sm:text-xs break-all">{viewingEdge.hostLocal}</span>
           </div>
-          <div class="col-span-2">
-            <span class="text-muted-foreground block text-xs mb-0.5">CN del certificado de router</span>
-            <span class="text-xs font-mono">{viewingEdge.cn}</span>
+          <div class="sm:col-span-2">
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">CN del certificado de router</span>
+            <span class="text-[11px] sm:text-xs font-mono break-all">{viewingEdge.cn}</span>
           </div>
-          <div class="col-span-2">
-            <span class="text-muted-foreground block text-xs mb-0.5">Ruta Base de Datos</span>
-            <span class="text-xs font-mono break-all text-secondary-foreground">{viewingEdge.dataBasePath}</span>
+          <div class="sm:col-span-2">
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">Ruta Base de Datos</span>
+            <span class="text-[11px] sm:text-xs font-mono break-all text-secondary-foreground">{viewingEdge.dataBasePath}</span>
           </div>
           <div>
-            <span class="text-muted-foreground block text-xs mb-0.5">Tamaño del Buffer</span>
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">Tamaño del Buffer</span>
             <span class="text-card-foreground">{viewingEdge.bufferLength}</span>
           </div>
           <div>
-            <span class="text-muted-foreground block text-xs mb-0.5">Nivel de Log</span>
+            <span class="text-muted-foreground block text-[11px] sm:text-xs mb-0.5">Nivel de Log</span>
             <span class="text-card-foreground">{viewingEdge.logLevel}</span>
           </div>
         </div>
@@ -444,42 +444,42 @@
 
       <div>
         <h3 class="text-sm uppercase tracking-wider font-bold text-primary mb-3">Configuración de Protocolo</h3>
-        <div class="space-y-2 bg-card border border-border p-4 rounded-xl text-sm">
-          <div class="flex justify-between border-b border-border/50 pb-2">
-            <span class="text-muted-foreground">Numero maximo de intentos en handshake</span>
-            <span class="font-mono">{viewingEdge.maxNumberHandshakeAttempts}</span>
+        <div class="space-y-2 bg-card/50 border border-border p-3 sm:p-4 rounded-xl text-xs sm:text-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 pb-2 gap-1">
+            <span class="text-muted-foreground">Número máximo de intentos en handshake</span>
+            <span class="font-mono font-medium">{viewingEdge.maxNumberHandshakeAttempts}</span>
           </div>
-          <div class="flex justify-between border-b border-border/50 py-1">
-            <span class="text-muted-foreground">Frecuencia de envio de mensajes en cualquier fase</span>
-            <span class="font-mono">{viewingEdge.frequencyMessagesPhase} s</span>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 py-1.5 gap-1">
+            <span class="text-muted-foreground">Frecuencia de envío de mensajes en cualquier fase</span>
+            <span class="font-mono font-medium">{viewingEdge.frequencyMessagesPhase} s</span>
           </div>
-          <div class="flex justify-between border-b border-border/50 py-1">
-            <span class="text-muted-foreground">Frecuencia de envio de mensajes en safe mode</span>
-            <span class="font-mono">{viewingEdge.frequencyMessagesSafeMode} s</span>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 py-1.5 gap-1">
+            <span class="text-muted-foreground">Frecuencia de envío de mensajes en safe mode</span>
+            <span class="font-mono font-medium">{viewingEdge.frequencyMessagesSafeMode} s</span>
           </div>
-          <div class="flex justify-between border-b border-border/50 py-1">
-            <span class="text-muted-foreground">Tiempo limite de espera en handshake</span>
-            <span class="font-mono">{viewingEdge.handshakeTimeLimit} s</span>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 py-1.5 gap-1">
+            <span class="text-muted-foreground">Tiempo límite de espera en handshake</span>
+            <span class="font-mono font-medium">{viewingEdge.handshakeTimeLimit} s</span>
           </div>
-          <div class="flex justify-between border-b border-border/50 py-1">
-            <span class="text-muted-foreground">Tiempo limite de duracion de cualquier fase</span>
-            <span class="font-mono">{viewingEdge.phaseTimeLimit} s</span>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 py-1.5 gap-1">
+            <span class="text-muted-foreground">Tiempo límite de duración de cualquier fase</span>
+            <span class="font-mono font-medium">{viewingEdge.phaseTimeLimit} s</span>
           </div>
-          <div class="flex justify-between border-b border-border/50 py-1">
-            <span class="text-muted-foreground">Tiempo limite de duracion del modo safe mode</span>
-            <span class="font-mono">{viewingEdge.safeModeTimeLimit} s</span>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 py-1.5 gap-1">
+            <span class="text-muted-foreground">Tiempo límite de duración del modo safe mode</span>
+            <span class="font-mono font-medium">{viewingEdge.safeModeTimeLimit} s</span>
           </div>
-          <div class="flex justify-between border-b border-border/50 py-1">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 py-1.5 gap-1">
             <span class="text-muted-foreground">Heartbeat en balance mode</span>
-            <span class="font-mono">{viewingEdge.heartbeatBalanceModeTime} s</span>
+            <span class="font-mono font-medium">{viewingEdge.heartbeatBalanceModeTime} s</span>
           </div>
-          <div class="flex justify-between border-b border-border/50 py-1">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border/50 py-1.5 gap-1">
             <span class="text-muted-foreground">Heartbeat en normal</span>
-            <span class="font-mono">{viewingEdge.heartbeatNormalTime} s</span>
+            <span class="font-mono font-medium">{viewingEdge.heartbeatNormalTime} s</span>
           </div>
-          <div class="flex justify-between pt-1">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pt-1.5 gap-1">
             <span class="text-muted-foreground">Heartbeat en safe mode</span>
-            <span class="font-mono">{viewingEdge.heartbeatSafeModeTime} s</span>
+            <span class="font-mono font-medium">{viewingEdge.heartbeatSafeModeTime} s</span>
           </div>
         </div>
       </div>

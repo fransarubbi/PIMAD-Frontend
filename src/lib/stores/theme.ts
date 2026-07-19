@@ -5,8 +5,24 @@ type Theme = "light" | "dark"
 // Simple browser detection for non-SvelteKit environments
 const isBrowser = typeof window !== "undefined"
 
+function getSavedTheme(): Theme {
+  if (!isBrowser) return "dark"
+  const saved = (localStorage.getItem("theme") || sessionStorage.getItem("theme")) as Theme
+  return saved === "light" || saved === "dark" ? saved : "dark"
+}
+
+function saveTheme(theme: Theme) {
+  if (!isBrowser) return
+  localStorage.setItem("theme", theme)
+  sessionStorage.setItem("theme", theme)
+  document.documentElement.classList.toggle("dark", theme === "dark")
+}
+
 function createThemeStore() {
-  const defaultTheme: Theme = isBrowser ? (localStorage.getItem("theme") as Theme) || "dark" : "dark"
+  const defaultTheme: Theme = getSavedTheme()
+  if (isBrowser) {
+    document.documentElement.classList.toggle("dark", defaultTheme === "dark")
+  }
 
   const { subscribe, set, update } = writable<Theme>(defaultTheme)
 
@@ -15,25 +31,18 @@ function createThemeStore() {
     toggle: () => {
       update((current) => {
         const newTheme = current === "dark" ? "light" : "dark"
-        if (isBrowser) {
-          localStorage.setItem("theme", newTheme)
-          document.documentElement.classList.toggle("dark", newTheme === "dark")
-        }
+        saveTheme(newTheme)
         return newTheme
       })
     },
     set: (theme: Theme) => {
-      if (isBrowser) {
-        localStorage.setItem("theme", theme)
-        document.documentElement.classList.toggle("dark", theme === "dark")
-      }
+      saveTheme(theme)
       set(theme)
     },
     init: () => {
       if (isBrowser) {
-        const saved = localStorage.getItem("theme") as Theme
-        const theme = saved || "dark"
-        document.documentElement.classList.toggle("dark", theme === "dark")
+        const theme = getSavedTheme()
+        saveTheme(theme)
         set(theme)
       }
     },
@@ -41,3 +50,4 @@ function createThemeStore() {
 }
 
 export const theme = createThemeStore()
+

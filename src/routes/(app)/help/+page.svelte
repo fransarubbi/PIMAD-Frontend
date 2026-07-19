@@ -27,23 +27,23 @@
     description="Centro de ayuda y recursos del sistema"
   />
 
-  <div class="max-w-2xl">
+  <div class="max-w-2xl w-full">
     <div class="rounded-2xl border bg-card text-card-foreground shadow-sm">
       <div class="p-6">
-        <div class="flex items-start gap-4">
+        <div class="flex flex-col sm:flex-row items-start gap-4">
           <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <FileText class="h-6 w-6" />
           </div>
-          <div class="space-y-4">
+          <div class="space-y-4 flex-1 min-w-0">
             <div>
-              <h3 class="text-lg font-semibold leading-none tracking-tight">Manual del Sistema</h3>
-              <p class="mt-2 text-sm text-muted-foreground leading-relaxed">
+              <h3 class="text-lg font-semibold leading-none tracking-tight max-w-full break-words">Manual del Sistema</h3>
+              <p class="mt-2 text-sm text-muted-foreground leading-relaxed max-w-prose break-words">
                 Descargue la documentación completa del sistema para comprender el funcionamiento del mismo, configuración, despliegue y puesta en marcha.
               </p>
             </div>
 
             {#if downloadError}
-              <div class="rounded-lg bg-destructive/10 p-3 text-sm text-destructive border border-destructive/20">
+              <div class="rounded-lg bg-destructive/10 p-3 text-sm text-destructive border border-destructive/20 max-w-full break-words">
                 <span class="font-semibold">Error al descargar:</span> {downloadError}
               </div>
             {/if}

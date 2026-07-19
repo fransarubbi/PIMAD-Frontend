@@ -11,6 +11,8 @@ export const hubsLoading = writable(false);
 export const hubsError = writable<string | null>(null);
 /** Tracks which hubId is currently sending settings (202 in-progress). */
 export const hubsSaving = writable<string | null>(null);
+/** Tracks dynamic hub operational states received via SSE (HUB_STATE). */
+export const hubStates = writable<Record<string, string>>({});
 
 // ---------------------------------------------------------------------------
 // Actions

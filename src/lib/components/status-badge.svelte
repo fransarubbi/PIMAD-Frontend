@@ -8,21 +8,21 @@
   } = $props();
 
   const statusConfig: Record<string, { bg: string; text: string; dot: string; label: string; pulse?: boolean }> = {
-    online: { bg: 'bg-success/15', text: 'text-success', dot: 'bg-success', label: 'En línea', pulse: true },
-    offline: { bg: 'bg-destructive/15', text: 'text-destructive', dot: 'bg-destructive', label: 'Desconectado' },
-    warning: { bg: 'bg-warning/15', text: 'text-warning', dot: 'bg-warning', label: 'Advertencia', pulse: true },
-    active: { bg: 'bg-success/15', text: 'text-success', dot: 'bg-success', label: 'Activo', pulse: true },
-    inactive: { bg: 'bg-muted', text: 'text-muted-foreground', dot: 'bg-muted-foreground', label: 'Inactivo' },
-    valid: { bg: 'bg-success/15', text: 'text-success', dot: 'bg-success', label: 'Válido' },
-    expired: { bg: 'bg-destructive/15', text: 'text-destructive', dot: 'bg-destructive', label: 'Expirado' },
-    revoked: { bg: 'bg-warning/15', text: 'text-warning', dot: 'bg-warning', label: 'Revocado' },
-    available: { bg: 'bg-success/15', text: 'text-success', dot: 'bg-success', label: 'Disponible' },
-    deploying: { bg: 'bg-primary/15', text: 'text-primary', dot: 'bg-primary', label: 'Desplegando', pulse: true },
-    deprecated: { bg: 'bg-muted', text: 'text-muted-foreground', dot: 'bg-muted-foreground', label: 'Obsoleto' },
-    Inactive: { bg: 'bg-destructive/15', text: 'text-destructive', dot: 'bg-destructive', label: 'Inactivo', pulse: true },
-    Normal: { bg: 'bg-success/15', text: 'text-success', dot: 'bg-success', label: 'Normal' },
-    Balance: { bg: 'bg-warning/15', text: 'text-warning', dot: 'bg-warning', label: 'Balance' },
-    SafeMode: { bg: 'bg-orange-500/15', text: 'text-orange-500', dot: 'bg-orange-500', label: 'Safe Mode' },
+    online:     { bg: 'bg-success/15',      text: 'text-success',          dot: 'bg-success',          label: 'En línea',      pulse: true },
+    offline:    { bg: 'bg-destructive/15',  text: 'text-destructive',      dot: 'bg-destructive',      label: 'Desconectado',  pulse: true },
+    warning:    { bg: 'bg-warning/15',      text: 'text-warning',          dot: 'bg-warning',          label: 'Advertencia',   pulse: true },
+    active:     { bg: 'bg-success/15',      text: 'text-success',          dot: 'bg-success',          label: 'Activo',        pulse: true },
+    inactive:   { bg: 'bg-muted',           text: 'text-muted-foreground', dot: 'bg-muted-foreground', label: 'Inactivo',      pulse: true },
+    valid:      { bg: 'bg-success/15',      text: 'text-success',          dot: 'bg-success',          label: 'Válido',        pulse: true },
+    expired:    { bg: 'bg-destructive/15',  text: 'text-destructive',      dot: 'bg-destructive',      label: 'Expirado',      pulse: true },
+    revoked:    { bg: 'bg-warning/15',      text: 'text-warning',          dot: 'bg-warning',          label: 'Revocado',      pulse: true },
+    available:  { bg: 'bg-success/15',      text: 'text-success',          dot: 'bg-success',          label: 'Disponible',    pulse: true },
+    deploying:  { bg: 'bg-primary/15',      text: 'text-primary',          dot: 'bg-primary',          label: 'Desplegando',   pulse: true },
+    deprecated: { bg: 'bg-muted',           text: 'text-muted-foreground', dot: 'bg-muted-foreground', label: 'Obsoleto',      pulse: true },
+    Inactive:   { bg: 'bg-muted',           text: 'text-muted-foreground', dot: 'bg-muted-foreground', label: 'Inactivo',      pulse: true },
+    Normal:     { bg: 'bg-success/15',      text: 'text-success',          dot: 'bg-success',          label: 'Normal',        pulse: true },
+    Balance:    { bg: 'bg-warning/15',      text: 'text-warning',          dot: 'bg-warning',          label: 'Balanceo',      pulse: true },
+    SafeMode:   { bg: 'bg-orange-500/15',   text: 'text-orange-500',       dot: 'bg-orange-500',       label: 'Safe Mode',     pulse: true },
   };
 
   // Convert statusConfig keys to lowercase for resilient matching

@@ -124,15 +124,15 @@
 
             <div class="flex-1 min-w-0">
               <div class="flex items-start justify-between gap-2">
-                <div class="flex-1 min-w-0">
+                <div class="flex-1 min-w-0 max-w-full">
                   {#if notification.type === 'HELLO_WORLD'}
                     {@const matchEdge = notification.description.match(/edge_id:\s*(\S+)/)}
                     {@const matchTs = notification.description.match(/timestamp:\s*(\d+)/)}
                     {@const edgeId = matchEdge ? matchEdge[1] : 'Desconocido'}
                     {@const timestampStr = matchTs ? matchTs[1] : '0'}
                     
-                    <h4 class="font-semibold text-card-foreground text-base">Mensaje de Hello World</h4>
-                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground">
+                    <h4 class="font-semibold text-card-foreground text-base max-w-full break-words">Mensaje de Hello World</h4>
+                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
                       <span><strong class="font-medium">Edge:</strong> {edgeId}</span>
                       <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
                     </div>
@@ -144,8 +144,8 @@
                     {@const percentage = matchPerc ? matchPerc[1] : '0'}
                     {@const timestampStr = matchTs ? matchTs[1] : '0'}
 
-                    <h4 class="font-semibold text-card-foreground text-base">Resultado de actualización de firmware remota</h4>
-                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground">
+                    <h4 class="font-semibold text-card-foreground text-base max-w-full break-words">Resultado de actualización de firmware remota</h4>
+                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
                       <span><strong class="font-medium">Red:</strong> {networkId}</span>
                       <span><strong class="font-medium">Porcentaje de éxito:</strong> {percentage}%</span>
                       <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
@@ -160,14 +160,14 @@
                     {@const timestampStr = matchTs ? matchTs[1] : '0'}
                     {@const message = matchMsg ? matchMsg[1] : ''}
 
-                    <h4 class="font-semibold text-card-foreground text-base">Notificacion de Red</h4>
-                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground">
+                    <h4 class="font-semibold text-card-foreground text-base max-w-full break-words">Notificacion de Red</h4>
+                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
                       <span><strong class="font-medium">Red:</strong> {networkId}</span>
                       <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
                       <span><strong class="font-medium">Mensaje:</strong> {message}</span>
                     </div>
                   {:else}
-                    <p class="font-medium text-card-foreground leading-relaxed">
+                    <p class="font-medium text-card-foreground leading-relaxed max-w-full break-words">
                       {notification.description}
                     </p>
                   {/if}

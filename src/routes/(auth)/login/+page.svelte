@@ -13,6 +13,7 @@
   import ShieldAlert from 'lucide-svelte/icons/shield-alert';
   import UserX from 'lucide-svelte/icons/user-x';
   import AlertCircle from 'lucide-svelte/icons/alert-circle';
+  import logoSvg from '../../../logo/dirinfo_logo.svg';
 
   let email = $state('');
   let password = $state('');
@@ -102,6 +103,11 @@
 
 <!-- Login page -->
 <div class="relative flex min-h-screen items-center justify-center bg-background p-4 overflow-hidden">
+  <!-- Theme Toggle positioned at bottom left of screen -->
+  <div class="fixed bottom-6 left-6 z-50">
+    <ThemeToggle />
+  </div>
+
   <!-- Animated background elements -->
   <div class="pointer-events-none absolute inset-0">
     <div class="absolute -left-1/4 -top-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl animate-pulse"></div>
@@ -115,24 +121,19 @@
   </div>
 
   <div class="relative w-full max-w-md animate-scale-in">
-    <!-- Theme Toggle -->
-    <div class="absolute -top-16 right-0">
-      <ThemeToggle />
-    </div>
-
     <!-- Login Card -->
     <div class="rounded-3xl border border-border bg-card/80 backdrop-blur-xl p-8 shadow-2xl shadow-black/10">
       <!-- Logo -->
       <div class="flex flex-col items-center text-center">
         <div class="relative">
           <div class="absolute inset-0 rounded-2xl bg-primary/30 blur-xl"></div>
-          <div class="relative flex h-16 w-16 items-center justify-center rounded-2xl 
-                      bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30">
-            <LayoutDashboard class="h-8 w-8 text-primary-foreground" />
+          <div class="relative flex h-28 w-28 items-center justify-center rounded-2xl
+                      overflow-hidden shadow-lg shadow-primary/20 border border-primary/20">
+            <img src={logoSvg} alt="Logo UNSL" class="h-full w-full object-contain" />
           </div>
         </div>
-        <h1 class="mt-6 text-2xl font-bold text-card-foreground">Manager</h1>
-        <p class="mt-2 text-sm text-muted-foreground">
+        <h1 class="mt-5 text-2xl font-bold text-card-foreground">Manager</h1>
+        <p class="mt-1.5 text-sm text-muted-foreground">
           Inicia sesión para acceder al panel de control
         </p>
       </div>
@@ -223,5 +224,11 @@
         </button>
       </form>
     </div>
+
+    <!-- Watermark -->
+    <p class="mt-8 text-center text-xs font-semibold tracking-wide text-muted-foreground/70 animate-fade-in">
+      Departamento de Informática. UNSL {new Date().getFullYear()}
+    </p>
   </div>
 </div>
+

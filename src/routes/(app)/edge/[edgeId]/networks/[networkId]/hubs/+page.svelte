@@ -2,12 +2,13 @@
     import { onMount } from "svelte";
     import { edges } from "$lib/stores/edges";
     import { networks } from "$lib/stores/networks";
-    import { hubs, hubsLoading, hubsError, hubsSaving, hubsActions } from "$lib/stores/hubs";
+    import { hubs, hubsLoading, hubsError, hubsSaving, hubsActions, hubStates } from "$lib/stores/hubs";
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
     import PageHeader from "$lib/components/page-header.svelte";
     import EmptyState from "$lib/components/empty-state.svelte";
     import Modal from "$lib/components/modal.svelte";
+    import StatusBadge from "$lib/components/status-badge.svelte";
 
     import Cpu from "lucide-svelte/icons/cpu";
     import Eye from "lucide-svelte/icons/eye";
@@ -18,6 +19,17 @@
     import CheckCircle from "lucide-svelte/icons/check-circle";
 
     import type { HubSettings } from "$lib/types";
+
+    /** Maps an SSE hub state string to the key expected by StatusBadge. */
+    function hubStatusKey(hubId: string): string {
+        const raw = $hubStates[hubId];
+        switch (raw) {
+            case 'normal':  return 'Normal';
+            case 'balance': return 'Balance';
+            case 'safe':    return 'SafeMode';
+            default:        return 'Inactive';
+        }
+    }
 
     let edgeId = $derived($page.params.edgeId);
     let networkId = $derived($page.params.networkId);
@@ -139,10 +151,7 @@
                                     Enviando…
                                 </span>
                             {:else}
-                                <span class="inline-flex items-center gap-1.5 rounded-full bg-success/10 border border-success/20 px-2.5 py-1 text-xs font-semibold text-success">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-success"></span>
-                                    Activo
-                                </span>
+                                <StatusBadge status={hubStatusKey(hub.hubId)} />
                             {/if}
                         </div>
 
@@ -201,34 +210,34 @@
 >
     {#if selectedHub}
         <div class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-card border border-border rounded-lg p-3">
-                    <span class="block text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">Hub ID</span>
-                    <span class="text-sm font-medium font-mono">{selectedHub.hubId}</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
+                <div class="bg-card/50 border border-border rounded-xl p-3">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Hub ID</span>
+                    <span class="font-medium font-mono break-all">{selectedHub.hubId}</span>
                 </div>
-                <div class="bg-card border border-border rounded-lg p-3">
-                    <span class="block text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">Nombre</span>
-                    <span class="text-sm font-medium">{selectedHub.deviceName}</span>
+                <div class="bg-card/50 border border-border rounded-xl p-3">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Nombre</span>
+                    <span class="font-medium break-words">{selectedHub.deviceName}</span>
                 </div>
-                <div class="bg-card border border-border rounded-lg p-3">
-                    <span class="block text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">WIFI SSID</span>
-                    <span class="text-sm font-medium">{selectedHub.wifiSsid}</span>
+                <div class="bg-card/50 border border-border rounded-xl p-3">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">WIFI SSID</span>
+                    <span class="font-medium break-all">{selectedHub.wifiSsid}</span>
                 </div>
-                <div class="bg-card border border-border rounded-lg p-3">
-                    <span class="block text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">WIFI Contraseña</span>
-                    <span class="text-sm font-medium blur-sm hover:blur-none transition-all cursor-pointer font-mono">{selectedHub.wifiPassword || '********'}</span>
+                <div class="bg-card/50 border border-border rounded-xl p-3">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">WIFI Contraseña</span>
+                    <span class="font-medium blur-sm hover:blur-none transition-all cursor-pointer font-mono break-all">{selectedHub.wifiPassword || '********'}</span>
                 </div>
-                <div class="bg-card border border-border rounded-lg p-3 md:col-span-2">
-                    <span class="block text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">MQTT URI</span>
-                    <span class="text-sm font-medium font-mono break-all">{selectedHub.mqttUri}</span>
+                <div class="bg-card/50 border border-border rounded-xl p-3 sm:col-span-2">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">MQTT URI</span>
+                    <span class="font-medium font-mono break-all">{selectedHub.mqttUri}</span>
                 </div>
-                <div class="bg-card border border-border rounded-lg p-3">
-                    <span class="block text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">Sample (min)</span>
-                    <span class="text-sm font-medium">{selectedHub.sample}</span>
+                <div class="bg-card/50 border border-border rounded-xl p-3">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Sample (min)</span>
+                    <span class="font-medium">{selectedHub.sample}</span>
                 </div>
-                <div class="bg-card border border-border rounded-lg p-3">
-                    <span class="block text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">Modo Energía</span>
-                    <span class="text-sm font-medium">{selectedHub.energyMode === 0 ? 'Bajo consumo' : selectedHub.energyMode === 1 ? 'Balanceado' : selectedHub.energyMode === 2 ? 'Performance' : selectedHub.energyMode}</span>
+                <div class="bg-card/50 border border-border rounded-xl p-3">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Modo Energía</span>
+                    <span class="font-medium">{selectedHub.energyMode === 0 ? 'Bajo consumo' : selectedHub.energyMode === 1 ? 'Balanceado' : selectedHub.energyMode === 2 ? 'Performance' : selectedHub.energyMode}</span>
                 </div>
             </div>
 
@@ -266,7 +275,7 @@
             <input id="hub-name" type="text" bind:value={formHub.deviceName} class="input-field" required placeholder="Sensor Temperatura Planta 1" />
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="space-y-1.5">
                 <label for="hub-ssid" class="block text-sm font-medium text-card-foreground">WIFI SSID</label>
                 <input id="hub-ssid" type="text" bind:value={formHub.wifiSsid} class="input-field" required placeholder="IoT_Network_5G" />
@@ -282,7 +291,7 @@
             <input id="hub-mqtt" type="text" bind:value={formHub.mqttUri} class="input-field font-mono" required placeholder="mqtt://broker.hivemq.com:1883" />
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="space-y-1.5">
                 <label for="hub-sample" class="block text-sm font-medium text-card-foreground">Sample (min)</label>
                 <input id="hub-sample" type="number" bind:value={formHub.sample} class="input-field" required placeholder="5" />
@@ -301,7 +310,7 @@
             <strong>Nota:</strong> La respuesta 202 indica que la solicitud fue aceptada. El servidor esperará hasta 5 minutos la confirmación del hardware.
         </p>
 
-        <div class="flex gap-3 pt-6 pb-2">
+        <div class="flex flex-col sm:flex-row gap-3 pt-4 pb-1">
             <button
                 type="button"
                 onclick={() => (showEditModal = false)}

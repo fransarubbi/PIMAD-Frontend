@@ -180,7 +180,10 @@
                             </div>
                             <!-- Active indicator -->
                             <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold {network.active ? 'bg-success/10 text-success border border-success/20' : 'bg-muted text-muted-foreground border border-border'}">
-                                <span class="h-1.5 w-1.5 rounded-full {network.active ? 'bg-success' : 'bg-muted-foreground'}"></span>
+                                <span class="relative flex h-1.5 w-1.5">
+                                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full {network.active ? 'bg-success' : 'bg-muted-foreground'} opacity-75"></span>
+                                    <span class="relative inline-flex h-1.5 w-1.5 rounded-full {network.active ? 'bg-success' : 'bg-muted-foreground'}"></span>
+                                </span>
                                 {network.active ? 'Activa' : 'Inactiva'}
                             </span>
                         </div>

@@ -1,16 +1,20 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { auth, fullName, initials } from "$lib/stores/auth.svelte";
+  import { theme } from "$lib/stores/theme";
   import ThemeToggle from "./theme-toggle.svelte";
+  import logoSvg from "../../logo/dirinfo_logo.svg";
   import {
     Server,
     ShieldCheck,
     Bell,
-    HardDrive,
     LogOut,
     ChevronRight,
-    LayoutDashboard,
     HelpCircle,
+    Settings,
+    Sun,
+    Moon,
+    X,
   } from "lucide-svelte";
 
   const navItems: { id: string; label: string; icon: typeof Server }[] = [
@@ -21,28 +25,22 @@
   ];
 
   let { onLogout }: { onLogout?: () => void } = $props();
+
+  let showProfileModal = $state(false);
 </script>
 
-<!-- Complete sidebar redesign with modern styling and animations -->
+<!-- Desktop Sidebar (Hidden on mobile) -->
 <aside
-  class="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col
+  class="hidden md:flex fixed left-0 top-0 z-40 h-screen w-64 flex-col
               bg-sidebar border-r border-sidebar-border
               shadow-xl shadow-black/5"
 >
   <!-- Logo -->
   <div class="flex h-16 items-center gap-3 border-b border-sidebar-border px-5">
     <div
-      class="relative flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/30"
+      class="flex h-14 w-14 items-center justify-center rounded-xl overflow-hidden shadow-md shadow-primary/20 border border-primary/20"
     >
-      <LayoutDashboard class="h-5 w-5 text-primary-foreground" />
-      <!-- Pulse animation -->
-      <span class="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
-        <span
-          class="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"
-        ></span>
-        <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-success"
-        ></span>
-      </span>
+      <img src={logoSvg} alt="Logo UNSL" class="h-full w-full object-contain" />
     </div>
     <div>
       <span class="text-lg font-bold text-sidebar-foreground">Manager</span>
@@ -133,3 +131,153 @@
     </div>
   </div>
 </aside>
+
+<!-- Mobile Bottom Navigation Bar (Visible only on mobile) -->
+<nav
+  class="flex md:hidden fixed bottom-0 left-0 right-0 z-50 h-16
+         bg-card/95 backdrop-blur-xl border-t border-border shadow-2xl
+         px-2 items-center justify-around"
+>
+  <a
+    href="/edge"
+    class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all {$page.url.pathname.startsWith('/edge') ? 'text-primary font-bold scale-105' : 'text-muted-foreground hover:text-foreground'}"
+  >
+    <Server class="h-5 w-5 mb-1" />
+    <span class="text-[11px]">Edge</span>
+  </a>
+  <a
+    href="/notifications"
+    class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all {$page.url.pathname.startsWith('/notifications') ? 'text-primary font-bold scale-105' : 'text-muted-foreground hover:text-foreground'}"
+  >
+    <div class="relative">
+      <Bell class="h-5 w-5 mb-1" />
+    </div>
+    <span class="text-[11px]">Notificaciones</span>
+  </a>
+  <a
+    href="/help"
+    class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all {$page.url.pathname.startsWith('/help') ? 'text-primary font-bold scale-105' : 'text-muted-foreground hover:text-foreground'}"
+  >
+    <HelpCircle class="h-5 w-5 mb-1" />
+    <span class="text-[11px]">Ayuda</span>
+  </a>
+  <button
+    type="button"
+    onclick={() => (showProfileModal = true)}
+    class="flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all {showProfileModal ? 'text-primary font-bold scale-105' : 'text-muted-foreground hover:text-foreground'}"
+  >
+    <Settings class="h-5 w-5 mb-1" />
+    <span class="text-[11px]">Perfil</span>
+  </button>
+</nav>
+
+<!-- Profile Modal / Drawer for Mobile -->
+{#if showProfileModal}
+  <!-- Backdrop -->
+  <div
+    role="button"
+    tabindex="0"
+    aria-label="Cerrar modal de perfil"
+    onclick={() => (showProfileModal = false)}
+    onkeydown={(e) => (e.key === 'Escape' || e.key === 'Enter') && (showProfileModal = false)}
+    class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden animate-fade-in"
+  ></div>
+
+  <!-- Profile Drawer / Modal -->
+  <div
+    class="fixed inset-x-4 bottom-20 z-50 rounded-3xl border border-border bg-card p-6 shadow-2xl md:hidden animate-slide-up max-h-[80vh] overflow-y-auto"
+  >
+    <!-- Top Header: Mi Perfil -->
+    <div class="flex items-center justify-between border-b border-border pb-4">
+      <div class="flex items-center gap-2">
+        <Settings class="h-5 w-5 text-primary" />
+        <h2 class="text-lg font-bold text-card-foreground">Mi Perfil</h2>
+      </div>
+      <button
+        onclick={() => (showProfileModal = false)}
+        aria-label="Cerrar"
+        class="rounded-lg p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground"
+      >
+        <X class="h-5 w-5" />
+      </button>
+    </div>
+
+    <!-- User Info -->
+    <div class="mt-6 flex flex-col items-center text-center">
+      <!-- Circle photo -->
+      <div
+        class="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-2xl font-bold text-primary-foreground shadow-lg shadow-primary/30 border-2 border-primary/20"
+      >
+        {auth.profile ? initials(auth.profile) : 'U'}
+      </div>
+      <p class="mt-4 text-lg font-bold text-card-foreground">
+        {auth.profile ? fullName(auth.profile) : 'Usuario'}
+      </p>
+      <p class="text-xs text-muted-foreground mt-0.5">
+        {auth.profile?.email || 'usuario@email.com'}
+      </p>
+    </div>
+
+    <!-- Mobile Theme Toggle Switch -->
+    <div class="mt-6 rounded-2xl bg-secondary/60 p-4 border border-border">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          {#if $theme === 'dark'}
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400"
+            >
+              <Sun class="h-5 w-5" />
+            </div>
+          {:else}
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"
+            >
+              <Moon class="h-5 w-5" />
+            </div>
+          {/if}
+          <div class="text-left">
+            <p class="text-sm font-semibold text-foreground">Modo de visualización</p>
+            <p class="text-xs text-muted-foreground">
+              {$theme === 'dark' ? 'Tema Oscuro activado' : 'Tema Claro activado'}
+            </p>
+          </div>
+        </div>
+
+        <!-- Rectangular Switch Button -->
+        <button
+          type="button"
+          role="switch"
+          aria-checked={$theme === 'dark'}
+          onclick={() => theme.toggle()}
+          class="relative inline-flex h-8 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 {$theme === 'dark' ? 'bg-primary' : 'bg-muted-foreground/30'}"
+        >
+          <span
+            class="pointer-events-none inline-block h-7 w-7 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out {$theme === 'dark' ? 'translate-x-6' : 'translate-x-0'}"
+          >
+            <span
+              class="flex h-full w-full items-center justify-center text-[10px] font-bold {$theme === 'dark' ? 'text-primary' : 'text-muted-foreground'}"
+            >
+              {#if $theme === 'dark'}
+                🌙
+              {:else}
+                ☀️
+              {/if}
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="mt-6">
+      <button
+        onclick={() => { showProfileModal = false; onLogout?.(); }}
+        class="flex w-full items-center justify-center gap-2 rounded-2xl bg-destructive/10 border border-destructive/30 py-3.5 text-sm font-semibold text-destructive transition-all hover:bg-destructive hover:text-white active:scale-[0.98]"
+      >
+        <LogOut class="h-4 w-4" />
+        <span>Cerrar sesión</span>
+      </button>
+    </div>
+  </div>
+{/if}
+

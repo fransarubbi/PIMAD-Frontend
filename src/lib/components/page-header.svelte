@@ -1,6 +1,4 @@
 <script lang="ts">
-  import ThemeToggle from './theme-toggle.svelte';
-
   let { title, description }: { title: string; description?: string } = $props();
 </script>
 
@@ -15,5 +13,5 @@
       <p class="mt-1.5 text-sm text-muted-foreground max-w-xl">{description}</p>
     {/if}
   </div>
-  <ThemeToggle />
 </div>
+

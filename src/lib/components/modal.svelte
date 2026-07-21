@@ -28,7 +28,7 @@
 </script>
 
 {#if open}
-  <div class="fixed inset-0 z-50 overflow-y-auto animate-fade-in">
+  <div class="fixed inset-0 z-50 animate-fade-in">
     <!-- Backdrop -->
     <div
       class="fixed inset-0 bg-background/80 backdrop-blur-md cursor-pointer transition-opacity"
@@ -60,7 +60,7 @@
           </button>
         </div>
         
-        <div class="overflow-y-auto flex-1 pr-1 -mr-1">
+        <div class="overflow-y-auto flex-1">
           {#if children}
             {@render children()}
           {/if}

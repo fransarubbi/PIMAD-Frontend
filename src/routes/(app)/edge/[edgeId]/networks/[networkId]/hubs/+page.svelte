@@ -110,7 +110,7 @@
 
         <PageHeader
             title={`Hubs de la red: ${currentNetwork?.name ?? networkId}`}
-            description="Gestiona y configura los hubs de esta familia de sensores"
+        description="Gestiona y configura los hubs de la red."
         />
 
         <div class="card-interactive p-6 animate-fade-in">
@@ -209,39 +209,39 @@
     onClose={() => (showInfoModal = false)}
 >
     {#if selectedHub}
-        <div class="space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-                <div class="bg-card/50 border border-border rounded-xl p-3">
+        <div class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div class="bg-muted/30 border border-border rounded-xl p-3">
                     <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Hub ID</span>
-                    <span class="font-medium font-mono break-all">{selectedHub.hubId}</span>
+                    <span class="font-medium font-mono break-all text-card-foreground">{selectedHub.hubId}</span>
                 </div>
-                <div class="bg-card/50 border border-border rounded-xl p-3">
+                <div class="bg-muted/30 border border-border rounded-xl p-3">
                     <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Nombre</span>
-                    <span class="font-medium break-words">{selectedHub.deviceName}</span>
+                    <span class="font-medium break-words text-card-foreground">{selectedHub.deviceName}</span>
                 </div>
-                <div class="bg-card/50 border border-border rounded-xl p-3">
+                <div class="bg-muted/30 border border-border rounded-xl p-3">
                     <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">WIFI SSID</span>
-                    <span class="font-medium break-all">{selectedHub.wifiSsid}</span>
+                    <span class="font-medium break-all text-card-foreground">{selectedHub.wifiSsid}</span>
                 </div>
-                <div class="bg-card/50 border border-border rounded-xl p-3">
+                <div class="bg-muted/30 border border-border rounded-xl p-3">
                     <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">WIFI Contraseña</span>
-                    <span class="font-medium blur-sm hover:blur-none transition-all cursor-pointer font-mono break-all">{selectedHub.wifiPassword || '********'}</span>
+                    <span class="font-medium blur-none sm:blur-sm sm:hover:blur-none transition-all cursor-pointer font-mono break-all text-card-foreground">{selectedHub.wifiPassword || '********'}</span>
                 </div>
-                <div class="bg-card/50 border border-border rounded-xl p-3 sm:col-span-2">
+                <div class="bg-muted/30 border border-border rounded-xl p-3 sm:col-span-2">
                     <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">MQTT URI</span>
-                    <span class="font-medium font-mono break-all">{selectedHub.mqttUri}</span>
+                    <span class="font-medium font-mono break-all text-card-foreground">{selectedHub.mqttUri}</span>
                 </div>
-                <div class="bg-card/50 border border-border rounded-xl p-3">
-                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Sample (min)</span>
-                    <span class="font-medium">{selectedHub.sample}</span>
+                <div class="bg-muted/30 border border-border rounded-xl p-3">
+                    <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Sampleo (seg)</span>
+                    <span class="font-medium text-card-foreground">{selectedHub.sample}</span>
                 </div>
-                <div class="bg-card/50 border border-border rounded-xl p-3">
+                <div class="bg-muted/30 border border-border rounded-xl p-3">
                     <span class="block text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">Modo Energía</span>
-                    <span class="font-medium">{selectedHub.energyMode === 0 ? 'Bajo consumo' : selectedHub.energyMode === 1 ? 'Balanceado' : selectedHub.energyMode === 2 ? 'Performance' : selectedHub.energyMode}</span>
+                    <span class="font-medium text-card-foreground">{selectedHub.energyMode === 0 ? 'Bajo consumo' : selectedHub.energyMode === 1 ? 'Balanceado' : selectedHub.energyMode === 2 ? 'Performance' : selectedHub.energyMode}</span>
                 </div>
             </div>
 
-            <div class="pt-4 flex justify-end">
+            <div class="pt-2 flex justify-end">
                 <button onclick={() => (showInfoModal = false)} class="btn-primary px-5 py-2.5 rounded-xl text-sm">Cerrar</button>
             </div>
         </div>
@@ -293,7 +293,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="space-y-1.5">
-                <label for="hub-sample" class="block text-sm font-medium text-card-foreground">Sample (min)</label>
+                <label for="hub-sample" class="block text-sm font-medium text-card-foreground">Sampleo (seg)</label>
                 <input id="hub-sample" type="number" bind:value={formHub.sample} class="input-field" required placeholder="5" />
             </div>
             <div class="space-y-1.5">

@@ -139,8 +139,6 @@
       icon={ShieldCheck}
       title="Sin certificados"
       description="No hay certificados mTLS configurados. Genera uno para asegurar las comunicaciones de tu sistema."
-      actionLabel="Generar Certificado"
-      onAction={() => { resetForm(); showCreateModal = true; }}
     />
   {:else}
     <div class="rounded-2xl border border-border bg-card overflow-hidden shadow-sm animate-fade-in">

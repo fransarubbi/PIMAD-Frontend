@@ -36,21 +36,21 @@
   }
 
   .dark {
-    /* Modern Dark Palette - Slick Black & Greys with Blue Accent */
-    --background: hsl(0 0% 5%); /* Almost black */
-    --foreground: hsl(210 40% 98%);
-    --card: hsl(0 0% 9%); /* Slightly lighter than bg */
-    --card-foreground: hsl(210 40% 98%);
-    --popover: hsl(0 0% 9%);
-    --popover-foreground: hsl(210 40% 98%);
-    --primary: hsl(217 91% 60%); /* Keep the blue accent */
+    /* GNOME 44-inspired dark palette — lighter greys */
+    --background: hsl(0 0% 16%);       /* #292929 — main shell */
+    --foreground: hsl(210 15% 92%);
+    --card: hsl(0 0% 18%);             /* #2e2e2e — cards & panels */
+    --card-foreground: hsl(210 15% 92%);
+    --popover: hsl(0 0% 20%);
+    --popover-foreground: hsl(210 15% 92%);
+    --primary: hsl(217 91% 60%);
     --primary-hover: hsl(217 91% 65%);
     --primary-foreground: hsl(0 0% 100%);
-    --secondary: hsl(0 0% 15%); /* Dark grey for secondary elements */
-    --secondary-foreground: hsl(210 40% 98%);
-    --muted: hsl(0 0% 15%);
-    --muted-foreground: hsl(215 20% 65%);
-    --accent: hsl(217 91% 60%); /* Align accent with primary blue */
+    --secondary: hsl(0 0% 19%);        /* #303030 — raised surfaces */
+    --secondary-foreground: hsl(210 15% 92%);
+    --muted: hsl(0 0% 19%);
+    --muted-foreground: hsl(215 14% 58%);
+    --accent: hsl(217 91% 60%);
     --accent-foreground: hsl(0 0% 100%);
     --destructive: hsl(0 84% 60%);
     --destructive-foreground: hsl(0 0% 100%);
@@ -58,13 +58,13 @@
     --success-foreground: hsl(0 0% 100%);
     --warning: hsl(38 92% 50%);
     --warning-foreground: hsl(0 0% 100%);
-    --border: hsl(0 0% 15%); /* Subtle borders */
-    --input: hsl(0 0% 15%);
+    --border: hsl(0 0% 22%);           /* #383838 — visible but soft borders */
+    --input: hsl(0 0% 23%);
     --ring: hsl(217 91% 60%);
-    --sidebar: hsl(0 0% 7%); /* Distinct but dark sidebar */
-    --sidebar-foreground: hsl(210 40% 98%);
-    --sidebar-border: hsl(0 0% 15%);
-    --sidebar-accent: hsl(0 0% 12%);
+    --sidebar: hsl(0 0% 14%);          /* #242424 — sidebar */
+    --sidebar-foreground: hsl(210 15% 92%);
+    --sidebar-border: hsl(0 0% 24%);
+    --sidebar-accent: hsl(0 0% 20%);
   }
 }
 

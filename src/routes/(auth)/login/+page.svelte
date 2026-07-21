@@ -127,9 +127,9 @@
       <div class="flex flex-col items-center text-center">
         <div class="relative">
           <div class="absolute inset-0 rounded-2xl bg-primary/30 blur-xl"></div>
-          <div class="relative flex h-28 w-28 items-center justify-center rounded-2xl
+          <div class="relative flex h-28 w-28 items-center justify-center rounded-3xl
                       overflow-hidden shadow-lg shadow-primary/20 border border-primary/20">
-            <img src={logoSvg} alt="Logo UNSL" class="h-full w-full object-contain" />
+            <img src={logoSvg} alt="Logo UNSL" class="h-full w-full object-contain scale-[1.15]" />
           </div>
         </div>
         <h1 class="mt-5 text-2xl font-bold text-card-foreground">Manager</h1>

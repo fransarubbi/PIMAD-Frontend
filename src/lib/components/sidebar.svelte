@@ -38,9 +38,9 @@
   <!-- Logo -->
   <div class="flex h-16 items-center gap-3 border-b border-sidebar-border px-5">
     <div
-      class="flex h-14 w-14 items-center justify-center rounded-xl overflow-hidden shadow-md shadow-primary/20 border border-primary/20"
+      class="flex h-14 w-14 items-center justify-center rounded-2xl overflow-hidden shadow-md shadow-primary/20 border border-primary/20"
     >
-      <img src={logoSvg} alt="Logo UNSL" class="h-full w-full object-contain" />
+      <img src={logoSvg} alt="Logo UNSL" class="h-full w-full object-contain scale-[1.15]" />
     </div>
     <div>
       <span class="text-lg font-bold text-sidebar-foreground">Manager</span>

@@ -23,6 +23,7 @@
     ERROR:   { icon: AlertCircle,   bgColor: 'bg-destructive/10', iconColor: 'text-destructive', borderColor: 'border-l-destructive' },
     HELLO_WORLD: { icon: MessageSquare, bgColor: 'bg-success/10', iconColor: 'text-success', borderColor: 'border-l-success' },
     FIRMWARE_OUTCOME: { icon: RefreshCw, bgColor: 'bg-indigo-500/10', iconColor: 'text-indigo-500', borderColor: 'border-l-indigo-500' },
+    FIRMWARE_OUTCOME_ERROR: { icon: AlertCircle, bgColor: 'bg-destructive/10', iconColor: 'text-destructive', borderColor: 'border-l-destructive' },
     NETWORK_RESULT: { icon: Info, bgColor: 'bg-cyan-500/10', iconColor: 'text-cyan-500', borderColor: 'border-l-cyan-500' },
   };
 
@@ -149,6 +150,20 @@
                       <span><strong class="font-medium">Red:</strong> {networkId}</span>
                       <span><strong class="font-medium">Porcentaje de éxito:</strong> {percentage}%</span>
                       <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
+                    </div>
+                  {:else if notification.type === 'FIRMWARE_OUTCOME_ERROR'}
+                    {@const matchNet = notification.description.match(/network_id:\s*(\S+)/)}
+                    {@const matchErr = notification.description.match(/error:\s*(.*)/)}
+                    {@const matchTs = notification.description.match(/timestamp:\s*(\d+)/)}
+                    {@const networkId = matchNet ? matchNet[1] : 'Desconocido'}
+                    {@const errorMessage = matchErr ? matchErr[1] : 'Error desconocido'}
+                    {@const timestampStr = matchTs ? matchTs[1] : '0'}
+
+                    <h4 class="font-semibold text-destructive text-base max-w-full break-words">Error en Actualización de Firmware</h4>
+                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
+                      <span><strong class="font-medium text-destructive/80">Red:</strong> {networkId}</span>
+                      <span><strong class="font-medium text-destructive/80">Error:</strong> {errorMessage}</span>
+                      <span><strong class="font-medium text-destructive/80">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
                     </div>
                   {:else if notification.type === 'NETWORK_RESULT'}
                     {@const matchNet = notification.description.match(/network_id:\s*(\S+)/)}

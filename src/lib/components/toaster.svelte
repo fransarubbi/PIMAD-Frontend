@@ -16,6 +16,7 @@
     ERROR: { icon: AlertCircle, colorClass: 'text-destructive' },
     HELLO_WORLD: { icon: MessageSquare, colorClass: 'text-success' },
     FIRMWARE_OUTCOME: { icon: RefreshCw, colorClass: 'text-indigo-500' },
+    FIRMWARE_OUTCOME_ERROR: { icon: AlertCircle, colorClass: 'text-destructive' },
     NETWORK_RESULT: { icon: Info, colorClass: 'text-cyan-500' },
   };
 
@@ -36,6 +37,12 @@
         const networkId = matchNet ? matchNet[1] : 'Desconocida';
         const percentage = matchPerc ? matchPerc[1] : '0';
         return { title: 'Actualización de Firmware', message: `Resultado en ${networkId}: ${percentage}%` };
+    } else if (notification.type === 'FIRMWARE_OUTCOME_ERROR') {
+        const matchNet = notification.description.match(/network_id:\s*(\S+)/);
+        const matchErr = notification.description.match(/error:\s*(.*)/);
+        const networkId = matchNet ? matchNet[1] : 'Desconocida';
+        const errorMessage = matchErr ? matchErr[1] : 'Error desconocido';
+        return { title: 'Error de Firmware', message: `Red: ${networkId} - Error: ${errorMessage}` };
     }
     return { title: 'Nueva Alerta', message: notification.description };
   }

@@ -54,6 +54,11 @@
   async function generateCertificate() {
     if (!form.displayName.trim() || !form.commonName.trim()) return;
     actionError = null;
+
+    if (form.deviceType === 'HUB') {
+      form.sanDomain = '';
+    }
+
     try {
       await certificatesActions.generate({ ...form });
       resetForm();
@@ -271,11 +276,13 @@
         <input id="cert-country" type="text" bind:value={form.country} class="input-field font-mono uppercase" maxlength="2" required placeholder="AR" />
       </div>
 
-      <div class="col-span-2 space-y-1.5">
-        <label for="cert-san" class="block text-sm font-medium text-card-foreground">SAN Domain</label>
-        <input id="cert-san" type="text" bind:value={form.sanDomain} class="input-field font-mono" required placeholder="edge-alpha.local" />
-        <p class="text-xs text-muted-foreground">Subject Alternative Name — normalmente igual al CN para dispositivos IoT.</p>
-      </div>
+      {#if form.deviceType !== 'HUB'}
+        <div class="col-span-2 space-y-1.5">
+          <label for="cert-san" class="block text-sm font-medium text-card-foreground">SAN Domain</label>
+          <input id="cert-san" type="text" bind:value={form.sanDomain} class="input-field font-mono" required placeholder="edge-alpha.local" />
+          <p class="text-xs text-muted-foreground">Subject Alternative Name — normalmente igual al CN para dispositivos IoT.</p>
+        </div>
+      {/if}
     </div>
 
     <p class="text-xs text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2">

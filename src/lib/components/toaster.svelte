@@ -15,8 +15,6 @@
     WARNING: { icon: AlertTriangle, colorClass: 'text-warning' },
     ERROR: { icon: AlertCircle, colorClass: 'text-destructive' },
     HELLO_WORLD: { icon: MessageSquare, colorClass: 'text-success' },
-    FIRMWARE_OUTCOME: { icon: RefreshCw, colorClass: 'text-indigo-500' },
-    FIRMWARE_OUTCOME_ERROR: { icon: AlertCircle, colorClass: 'text-destructive' },
     NETWORK_RESULT: { icon: Info, colorClass: 'text-cyan-500' },
   };
 
@@ -31,18 +29,30 @@
         const matchEdge = notification.description.match(/edge_id:\s*(\S+)/);
         const edgeId = matchEdge ? matchEdge[1] : 'Desconocido';
         return { title: 'Nuevo Hello World', message: `Edge conectado: ${edgeId}` };
-    } else if (notification.type === 'FIRMWARE_OUTCOME') {
+    } else if (notification.type === 'FIRMWARE_HUB_RESULT') {
         const matchNet = notification.description.match(/network_id:\s*(\S+)/);
         const matchPerc = notification.description.match(/percentage:\s*([\d.]+)/);
-        const networkId = matchNet ? matchNet[1] : 'Desconocida';
-        const percentage = matchPerc ? matchPerc[1] : '0';
-        return { title: 'Actualización de Firmware', message: `Resultado en ${networkId}: ${percentage}%` };
-    } else if (notification.type === 'FIRMWARE_OUTCOME_ERROR') {
-        const matchNet = notification.description.match(/network_id:\s*(\S+)/);
         const matchErr = notification.description.match(/error:\s*(.*)/);
         const networkId = matchNet ? matchNet[1] : 'Desconocida';
-        const errorMessage = matchErr ? matchErr[1] : 'Error desconocido';
-        return { title: 'Error de Firmware', message: `Red: ${networkId} - Error: ${errorMessage}` };
+        const percentage = matchPerc ? matchPerc[1] : '0';
+        const errorMsg = matchErr ? matchErr[1] : 'Desconocido';
+        
+        if (percentage === '100.0') {
+            return { title: 'Actualización de Firmware Hub', message: `Éxito en ${networkId}`, icon: RefreshCw, colorClass: 'text-indigo-500' };
+        } else {
+            return { title: 'Error de Firmware Hub', message: `Red: ${networkId} - Error: ${errorMsg}`, icon: AlertCircle, colorClass: 'text-destructive' };
+        }
+    } else if (notification.type === 'FIRMWARE_EDGE_RESULT') {
+        const matchEdge = notification.description.match(/edge_id:\s*(\S+)/);
+        const matchErr = notification.description.match(/error:\s*(true|false)/);
+        const edgeId = matchEdge ? matchEdge[1] : 'Desconocido';
+        const isError = matchErr ? matchErr[1] === 'true' : true;
+        
+        if (!isError) {
+            return { title: 'Actualización de Firmware Edge', message: `Éxito en ${edgeId}`, icon: RefreshCw, colorClass: 'text-indigo-500' };
+        } else {
+            return { title: 'Error de Firmware Edge', message: `Edge: ${edgeId} - Fallo en la actualización`, icon: AlertCircle, colorClass: 'text-destructive' };
+        }
     }
     return { title: 'Nueva Alerta', message: notification.description };
   }
@@ -52,6 +62,8 @@
   {#each toasts.toasts as toast (toast.id)}
     {@const config = typeConfig[toast.notification.type] ?? typeConfig.INFO}
     {@const content = getTitleAndMessage(toast.notification)}
+    {@const Icon = (content as any).icon ?? config.icon}
+    {@const iconColor = (content as any).colorClass ?? config.colorClass}
     
     <div
       in:fly={{ y: -50, duration: 600, easing: backOut }}
@@ -59,7 +71,7 @@
       class="pointer-events-auto flex items-start gap-3 w-full bg-card/95 backdrop-blur-md border border-border shadow-2xl rounded-2xl p-4 dark:bg-card/90"
     >
       <div class="mt-0.5 shrink-0">
-        <config.icon class="h-5 w-5 {config.colorClass}" />
+        <Icon class="h-5 w-5 {iconColor}" />
       </div>
       <div class="flex-1 min-w-0">
         <p class="text-sm font-bold text-card-foreground">{content.title}</p>

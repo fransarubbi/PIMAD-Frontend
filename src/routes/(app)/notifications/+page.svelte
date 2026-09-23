@@ -22,8 +22,6 @@
     WARNING: { icon: AlertTriangle, bgColor: 'bg-warning/10',     iconColor: 'text-warning',     borderColor: 'border-l-warning' },
     ERROR:   { icon: AlertCircle,   bgColor: 'bg-destructive/10', iconColor: 'text-destructive', borderColor: 'border-l-destructive' },
     HELLO_WORLD: { icon: MessageSquare, bgColor: 'bg-success/10', iconColor: 'text-success', borderColor: 'border-l-success' },
-    FIRMWARE_OUTCOME: { icon: RefreshCw, bgColor: 'bg-indigo-500/10', iconColor: 'text-indigo-500', borderColor: 'border-l-indigo-500' },
-    FIRMWARE_OUTCOME_ERROR: { icon: AlertCircle, bgColor: 'bg-destructive/10', iconColor: 'text-destructive', borderColor: 'border-l-destructive' },
     NETWORK_RESULT: { icon: Info, bgColor: 'bg-cyan-500/10', iconColor: 'text-cyan-500', borderColor: 'border-l-cyan-500' },
   };
 
@@ -110,7 +108,11 @@
   {:else}
     <div class="space-y-3">
       {#each $notifications as notification, i}
-        {@const config = typeConfig[notification.type] ?? typeConfig.INFO}
+        {@const isFirmwareHubError = notification.type === 'FIRMWARE_HUB_RESULT' && notification.description.match(/percentage:\s*([\d.]+)/)?.[1] !== '100.0'}
+        {@const isFirmwareEdgeError = notification.type === 'FIRMWARE_EDGE_RESULT' && notification.description.match(/error:\s*(true|false)/)?.[1] === 'true'}
+        {@const isFirmwareError = isFirmwareHubError || isFirmwareEdgeError}
+        {@const isFirmwareSuccess = (notification.type === 'FIRMWARE_HUB_RESULT' && !isFirmwareHubError) || (notification.type === 'FIRMWARE_EDGE_RESULT' && !isFirmwareEdgeError)}
+        {@const config = isFirmwareError ? { icon: AlertCircle, bgColor: 'bg-destructive/10', iconColor: 'text-destructive', borderColor: 'border-l-destructive' } : isFirmwareSuccess ? { icon: RefreshCw, bgColor: 'bg-indigo-500/10', iconColor: 'text-indigo-500', borderColor: 'border-l-indigo-500' } : typeConfig[notification.type] ?? typeConfig.INFO}
         <div
           class="stagger-item group relative rounded-2xl border bg-card p-5
                  transition-all duration-300 hover:shadow-lg
@@ -137,34 +139,54 @@
                       <span><strong class="font-medium">Edge:</strong> {edgeId}</span>
                       <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
                     </div>
-                  {:else if notification.type === 'FIRMWARE_OUTCOME'}
+                  {:else if notification.type === 'FIRMWARE_HUB_RESULT'}
                     {@const matchNet = notification.description.match(/network_id:\s*(\S+)/)}
                     {@const matchPerc = notification.description.match(/percentage:\s*([\d.]+)/)}
-                    {@const matchTs = notification.description.match(/timestamp:\s*(\d+)/)}
-                    {@const networkId = matchNet ? matchNet[1] : 'Desconocido'}
-                    {@const percentage = matchPerc ? matchPerc[1] : '0'}
-                    {@const timestampStr = matchTs ? matchTs[1] : '0'}
-
-                    <h4 class="font-semibold text-card-foreground text-base max-w-full break-words">Resultado de actualización de firmware remota</h4>
-                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
-                      <span><strong class="font-medium">Red:</strong> {networkId}</span>
-                      <span><strong class="font-medium">Porcentaje de éxito:</strong> {percentage}%</span>
-                      <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
-                    </div>
-                  {:else if notification.type === 'FIRMWARE_OUTCOME_ERROR'}
-                    {@const matchNet = notification.description.match(/network_id:\s*(\S+)/)}
                     {@const matchErr = notification.description.match(/error:\s*(.*)/)}
                     {@const matchTs = notification.description.match(/timestamp:\s*(\d+)/)}
                     {@const networkId = matchNet ? matchNet[1] : 'Desconocido'}
-                    {@const errorMessage = matchErr ? matchErr[1] : 'Error desconocido'}
+                    {@const percentage = matchPerc ? matchPerc[1] : '0'}
+                    {@const errorMsg = matchErr ? matchErr[1] : 'Desconocido'}
                     {@const timestampStr = matchTs ? matchTs[1] : '0'}
 
-                    <h4 class="font-semibold text-destructive text-base max-w-full break-words">Error en Actualización de Firmware</h4>
-                    <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
-                      <span><strong class="font-medium text-destructive/80">Red:</strong> {networkId}</span>
-                      <span><strong class="font-medium text-destructive/80">Error:</strong> {errorMessage}</span>
-                      <span><strong class="font-medium text-destructive/80">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
-                    </div>
+                    {#if percentage === '100.0'}
+                      <h4 class="font-semibold text-card-foreground text-base max-w-full break-words">Resultado de actualización de firmware Hub</h4>
+                      <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
+                        <span><strong class="font-medium">Red:</strong> {networkId}</span>
+                        <span><strong class="font-medium">Estado:</strong> Éxito</span>
+                        <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
+                      </div>
+                    {:else}
+                      <h4 class="font-semibold text-destructive text-base max-w-full break-words">Error en Actualización de Firmware Hub</h4>
+                      <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
+                        <span><strong class="font-medium text-destructive/80">Red:</strong> {networkId}</span>
+                        <span><strong class="font-medium text-destructive/80">Error:</strong> {errorMsg}</span>
+                        <span><strong class="font-medium text-destructive/80">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
+                      </div>
+                    {/if}
+                  {:else if notification.type === 'FIRMWARE_EDGE_RESULT'}
+                    {@const matchEdge = notification.description.match(/edge_id:\s*(\S+)/)}
+                    {@const matchErr = notification.description.match(/error:\s*(true|false)/)}
+                    {@const matchTs = notification.description.match(/timestamp:\s*(\d+)/)}
+                    {@const edgeId = matchEdge ? matchEdge[1] : 'Desconocido'}
+                    {@const errorVal = matchErr ? matchErr[1] : 'true'}
+                    {@const timestampStr = matchTs ? matchTs[1] : '0'}
+
+                    {#if errorVal === 'false'}
+                      <h4 class="font-semibold text-card-foreground text-base max-w-full break-words">Resultado de actualización de firmware Edge</h4>
+                      <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
+                        <span><strong class="font-medium">Edge:</strong> {edgeId}</span>
+                        <span><strong class="font-medium">Estado:</strong> Éxito</span>
+                        <span><strong class="font-medium">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
+                      </div>
+                    {:else}
+                      <h4 class="font-semibold text-destructive text-base max-w-full break-words">Error en Actualización de Firmware Edge</h4>
+                      <div class="mt-1.5 flex flex-col gap-1 text-sm text-muted-foreground max-w-full break-words">
+                        <span><strong class="font-medium text-destructive/80">Edge:</strong> {edgeId}</span>
+                        <span><strong class="font-medium text-destructive/80">Error:</strong> Fallo en la actualización</span>
+                        <span><strong class="font-medium text-destructive/80">Timestamp:</strong> {formatArgentinaTime(timestampStr)}</span>
+                      </div>
+                    {/if}
                   {:else if notification.type === 'NETWORK_RESULT'}
                     {@const matchNet = notification.description.match(/network_id:\s*(\S+)/)}
                     {@const matchSucc = notification.description.match(/success:\s*(true|false)/)}

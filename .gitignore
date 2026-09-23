@@ -7,13 +7,22 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencies / builds
+node_modules/
+dist/
+dist-ssr/
 *.local
+
+# SvelteKit / Vite
+.svelte-kit/
+.vite/
+
+# Environment
+.env
 
 # Editor directories and files
 .vscode/*
+.vscode/
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -22,4 +31,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.env
+
+# Local pnpm lockfile
+pnpm-lock.yaml

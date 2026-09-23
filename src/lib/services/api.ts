@@ -227,6 +227,10 @@ export async function updateNetworkFirmware(networkId: string, edgeId: string): 
   });
 }
 
+export async function updateEdgeFirmware(edgeId: string): Promise<void> {
+  await apiFetch(`/edges/${edgeId}/update-firmware`, { method: 'POST' });
+}
+
 // --- Notifications (/api/notifications) ---
 
 export async function getActiveNotifications(): Promise<Notification[]> {

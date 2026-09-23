@@ -7,6 +7,7 @@
   import type { Edge } from "$lib/types";
   import { edges, edgesLoading, edgesActions, edgeStates } from "$lib/stores/edges";
   import { goto } from "$app/navigation";
+  import { updateEdgeFirmware } from "$lib/services/api";
   import Plus from "lucide-svelte/icons/plus";
   import Server from "lucide-svelte/icons/server";
   import NetworkIcon from "lucide-svelte/icons/network";
@@ -18,6 +19,7 @@
   import AlertCircle from "lucide-svelte/icons/alert-circle";
   import RefreshCw from "lucide-svelte/icons/refresh-cw";
   import Info from "lucide-svelte/icons/info";
+  import UploadCloud from "lucide-svelte/icons/upload-cloud";
 
   onMount(() => {
     edgesActions.load();
@@ -27,10 +29,12 @@
   let showCreateEdgeModal = $state(false);
   let showViewEdgeModal   = $state(false);
   let showDeleteEdgeModal = $state(false);
+  let showFirmwareUpdateModal = $state(false);
 
   // Selected items
   let viewingEdge       = $state<Edge | null>(null);
   let targetDeleteEdge  = $state<Edge | null>(null);
+  let targetFirmwareEdge = $state<Edge | null>(null);
 
   // Local action states (independent from the global list-loading state)
   let isSubmitting  = $state(false);
@@ -96,6 +100,28 @@
     targetDeleteEdge = edge;
     actionError = null;
     showDeleteEdgeModal = true;
+  }
+
+  function updateFirmwarePrompt(edge: Edge, event: Event) {
+    event.stopPropagation();
+    targetFirmwareEdge = edge;
+    actionError = null;
+    showFirmwareUpdateModal = true;
+  }
+
+  async function confirmFirmwareUpdate() {
+    if (!targetFirmwareEdge) return;
+    actionError = null;
+    isSubmitting = true;
+    try {
+      await updateEdgeFirmware(targetFirmwareEdge.edgeId);
+      showFirmwareUpdateModal = false;
+      targetFirmwareEdge = null;
+    } catch (err) {
+      actionError = err instanceof Error ? err.message : String(err);
+    } finally {
+      isSubmitting = false;
+    }
   }
 
   function viewEdgeConfig(edge: Edge, event: Event) {
@@ -228,6 +254,13 @@
               class="flex items-center justify-center rounded-lg border border-border bg-card px-3 py-2 text-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:border-primary/50"
             >
               <Eye class="h-4 w-4" />
+            </button>
+            <button
+              onclick={(e) => updateFirmwarePrompt(edge, e)}
+              title="Actualizar firmware"
+              class="flex items-center justify-center rounded-lg border border-border bg-card px-3 py-2 text-foreground transition-all duration-200 hover:bg-primary/10 hover:text-primary hover:border-primary/50"
+            >
+              <RefreshCw class="h-4 w-4" />
             </button>
             <button
               onclick={(e) => downloadEdgeConfig(edge, e)}
@@ -585,4 +618,59 @@
       </div>
     </div>
   {/if}
+</Modal>
+
+<!-- Firmware Update Modal -->
+<Modal
+    open={showFirmwareUpdateModal}
+    title="Actualización de Firmware"
+    onClose={() => { if (!isSubmitting) { showFirmwareUpdateModal = false; actionError = null; } }}
+>
+    {#if targetFirmwareEdge}
+    <div class="space-y-5 pt-2">
+        <div class="flex flex-col items-center justify-center p-6 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl text-center">
+            <div class="bg-blue-600 dark:bg-blue-500 text-white p-3 rounded-full mb-3">
+                <UploadCloud class="h-8 w-8" />
+            </div>
+            <p class="text-sm font-medium text-blue-700 dark:text-blue-400">Actualización OTA Remota</p>
+        </div>
+
+        <p class="text-sm text-card-foreground text-center px-2">
+            ¿Quiere actualizar el firmware del dispositivo Edge <strong class="font-bold underline decoration-blue-500 underline-offset-2">{targetFirmwareEdge.edgeId}</strong>?
+        </p>
+
+        <p class="text-xs text-muted-foreground text-center bg-muted/50 p-3 rounded-lg border border-border mx-2">
+            Esta acción enviará la instrucción al dispositivo y el equipo se reiniciará automáticamente.
+        </p>
+
+        {#if actionError}
+            <div class="flex items-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2 text-xs text-destructive">
+                <AlertCircle class="h-3.5 w-3.5 shrink-0" />
+                {actionError}
+            </div>
+        {/if}
+
+        <div class="flex gap-3 pt-4">
+            <button
+                type="button"
+                onclick={() => { showFirmwareUpdateModal = false; actionError = null; }}
+                disabled={isSubmitting}
+                class="btn-secondary flex-1 rounded-xl py-3 text-sm font-medium disabled:opacity-60"
+            >
+                Cancelar
+            </button>
+            <button
+                type="button"
+                onclick={confirmFirmwareUpdate}
+                disabled={isSubmitting}
+                class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white shadow-md hover:shadow-lg transition-all duration-200 ease-out active:scale-[0.98] flex-1 rounded-xl py-3 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-60"
+            >
+                {#if isSubmitting}
+                    <Loader class="h-4 w-4 animate-spin" />
+                {/if}
+                Confirmar
+            </button>
+        </div>
+    </div>
+    {/if}
 </Modal>
